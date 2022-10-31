@@ -92,13 +92,13 @@ def main():
 	logging.info("unparsed_args = %s", unparsed)
 
 	logging.info('----------- Network Initialization --------------')
-	snet = define_tsnet(name=args.s_name, num_class=args.num_class, cuda=args.cuda)
+	snet = define_tsnet(name=args.s_name, num_class=args.num_class, cuda=args.cuda) # 学生student网络
 	checkpoint = torch.load(args.s_init)
 	load_pretrained_model(snet, checkpoint['net'])
 	logging.info('Student: %s', snet)
 	logging.info('Student param size = %fMB', count_parameters_in_MB(snet))
 
-	tnet = define_tsnet(name=args.t_name, num_class=args.num_class, cuda=args.cuda)
+	tnet = define_tsnet(name=args.t_name, num_class=args.num_class, cuda=args.cuda) # 老师teacher网络
 	checkpoint = torch.load(args.t_model)
 	load_pretrained_model(tnet, checkpoint['net'])
 	tnet.eval()
@@ -111,10 +111,13 @@ def main():
 	# define loss functions
 	if args.kd_mode == 'logits':
 		criterionKD = Logits()
-	elif args.kd_mode == 'st':
-		criterionKD = SoftTarget(args.T) # 开山之作
-	elif args.kd_mode == 'at':
-		criterionKD = AT(args.p)
+	# 开山之作  
+	elif args.kd_mode == 'st': # kd_losses/st.py
+		criterionKD = SoftTarget(args.T)
+	# AT attention transfer
+	elif args.kd_mode == 'at': # kd_losses/at.py  Paying More Attention to Attention: Improving the Performance of Convolutional Neural Networks via Attention Transfer
+		criterionKD = AT(args.p) # 
+	# 
 	elif args.kd_mode == 'fitnet':
 		criterionKD = Hint()
 	elif args.kd_mode == 'nst':
@@ -374,18 +377,21 @@ def train(train_loader, nets, optimizer, criterions, epoch):
 		if args.kd_mode in ['sobolev', 'lwm']:
 			img.requires_grad = True
 
-		stem_s, rb1_s, rb2_s, rb3_s, feat_s, out_s = snet(img)
+		stem_s, rb1_s, rb2_s, rb3_s, feat_s, out_s = snet(img) # 输出特征和结果等相关参数>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		stem_t, rb1_t, rb2_t, rb3_t, feat_t, out_t = tnet(img)
 
 		cls_loss = criterionCls(out_s, target)
+		# SoftTarget（开山之作）  Response-Based Knowledge
 		if args.kd_mode in ['logits', 'st']:
 			kd_loss = criterionKD(out_s, out_t.detach()) * args.lambda_kd
 		elif args.kd_mode in ['fitnet', 'nst']:
 			kd_loss = criterionKD(rb3_s[1], rb3_t[1].detach()) * args.lambda_kd
+		# 02 (AT) - Paying More Attention to Attention
 		elif args.kd_mode in ['at', 'sp']:
 			kd_loss = (criterionKD(rb1_s[1], rb1_t[1].detach()) +
 					   criterionKD(rb2_s[1], rb2_t[1].detach()) +
 					   criterionKD(rb3_s[1], rb3_t[1].detach())) / 3.0 * args.lambda_kd
+		# feature
 		elif args.kd_mode in ['pkt', 'rkd', 'cc']:
 			kd_loss = criterionKD(feat_s, feat_t.detach()) * args.lambda_kd
 		elif args.kd_mode in ['fsp']:
@@ -477,10 +483,13 @@ def test(test_loader, nets, criterions, epoch):
 				stem_t, rb1_t, rb2_t, rb3_t, feat_t, out_t = tnet(img)
 
 		cls_loss = criterionCls(out_s, target)
+		# 1 Response-Based Knowledge
 		if args.kd_mode in ['logits', 'st']:
 			kd_loss  = criterionKD(out_s, out_t.detach()) * args.lambda_kd
+		# 2 Feature-Based Knowledge
 		elif args.kd_mode in ['fitnet', 'nst']:
 			kd_loss = criterionKD(rb3_s[1], rb3_t[1].detach()) * args.lambda_kd
+		# 3 Relation-Based Knowledge？？？？？？
 		elif args.kd_mode in ['at', 'sp']:
 			kd_loss = (criterionKD(rb1_s[1], rb1_t[1].detach()) +
 					   criterionKD(rb2_s[1], rb2_t[1].detach()) +

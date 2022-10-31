@@ -29,9 +29,9 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --s_init "./results/base/base-c10-r20/initial_r20.pth.tar" \
                            --data_name cifar10 \
                            --num_class 10 \
-                           --t_name resnet110 \
-                           --s_name resnet20 \
-                           --kd_mode st \
+                           --t_name resnet110 \ # teacher
+                           --s_name resnet20 \ # student
+                           --kd_mode st \ # 区别>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                            --lambda_kd 0.1 \
                            --T 4.0 \
                            --note st-c10-r110-r20
@@ -45,8 +45,8 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --num_class 10 \
                            --t_name resnet110 \
                            --s_name resnet20 \
-                           --kd_mode at \
-                           --lambda_kd 1000.0 \
+                           --kd_mode at \ # 区别>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                           --lambda_kd 1000.0 \ # lambda_kd?????这么大
                            --p 2.0 \
                            --note at-c10-r110-r20
 

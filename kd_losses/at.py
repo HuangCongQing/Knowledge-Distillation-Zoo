@@ -24,6 +24,7 @@ class AT(nn.Module):
 
 		return loss
 
+	# 主要亮点
 	def attention_map(self, fm, eps=1e-6):
 		am = torch.pow(torch.abs(fm), self.p)
 		am = torch.sum(am, dim=1, keepdim=True)

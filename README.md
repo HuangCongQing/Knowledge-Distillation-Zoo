@@ -3,7 +3,9 @@
 
 ## 20221031
 
-Docs: https://www.yuque.com/huangzhongqing/lightweight/bpzv40
+Docs: 
+* 代码说明：https://www.yuque.com/huangzhongqing/lightweight/nzv8tr
+* 调研总结：https://www.yuque.com/huangzhongqing/lightweight/fto97u#R1vU9
 
 
 ### train

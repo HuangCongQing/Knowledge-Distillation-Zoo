@@ -5,12 +5,12 @@ import torch
 import torch.nn as nn
 
 
-# main入口
+# main入口（定义学生student和教师teacher网络）
 def define_tsnet(name, num_class, cuda=True):
 	if name == 'resnet20':
-		net = resnet20(num_class=num_class) # 网络
+		net = resnet20(num_class=num_class) # 学生student网络
 	elif name == 'resnet110':
-		net = resnet110(num_class=num_class)
+		net = resnet110(num_class=num_class) # 教师teacher网络
 	else:
 		raise Exception('model name does not exist.')
 
@@ -21,7 +21,7 @@ def define_tsnet(name, num_class, cuda=True):
 
 	return net
 
-
+# resnet卷积
 class resblock(nn.Module):
 	def __init__(self, in_channels, out_channels, return_before_act):
 		super(resblock, self).__init__()
@@ -62,7 +62,7 @@ class resblock(nn.Module):
 		else:
 			return pout, out
 
-# 网络1
+# 网络1：学生student网络（重点输出）
 class resnet20(nn.Module):
 	def __init__(self, num_class):
 		super(resnet20, self).__init__()
@@ -88,6 +88,7 @@ class resnet20(nn.Module):
 
 		self.num_class = num_class
 
+	# layer层
 	def make_layer(self, block, num, in_channels, out_channels): # num must >=2
 		layers = [block(in_channels, out_channels, False)]
 		for i in range(num-2):
@@ -105,11 +106,11 @@ class resnet20(nn.Module):
 		rb2 = self.res2(rb1[1])
 		rb3 = self.res3(rb2[1])
 
-		feat = self.avgpool(rb3[1])
+		feat = self.avgpool(rb3[1]) # pooling 之后的feature
 		feat = feat.view(feat.size(0), -1)
 		out  = self.fc(feat)
 
-		return stem, rb1, rb2, rb3, feat, out
+		return stem, rb1, rb2, rb3, feat, out # 输出结果>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	def get_channel_num(self):
 		return [16, 16, 32, 64, 64, self.num_class]
@@ -122,7 +123,7 @@ class resnet20(nn.Module):
 				(64,),
 				(self.num_class,)]
 
-# 网络2
+# 网络2：教师teacher网络
 class resnet110(nn.Module):
 	def __init__(self, num_class):
 		super(resnet110, self).__init__()

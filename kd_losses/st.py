@@ -13,12 +13,12 @@ class SoftTarget(nn.Module):
 	'''
 	def __init__(self, T):
 		super(SoftTarget, self).__init__()
-		self.T = T
+		self.T = T # 蒸馏系数
 
 	def forward(self, out_s, out_t):
     	# KL散度loss
-		loss = F.kl_div(F.log_softmax(out_s/self.T, dim=1),
-						F.softmax(out_t/self.T, dim=1),
+		loss = F.kl_div(F.log_softmax(out_s/self.T, dim=1), # student输出
+						F.softmax(out_t/self.T, dim=1), # teacher输出
 						reduction='batchmean') * self.T * self.T
 
 		return loss
