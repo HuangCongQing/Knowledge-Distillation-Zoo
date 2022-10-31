@@ -22,7 +22,7 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --lambda_kd 0.1 \
                            --note logits-c10-r110-r20
 
-# SoftTarget
+# SoftTarget KL散度（开山之作）
 CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --save_root "./results/st/" \
                            --t_model "./results/base/base-c10-r110/model_best.pth.tar" \

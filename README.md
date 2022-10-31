@@ -6,13 +6,36 @@
 Docs: https://www.yuque.com/huangzhongqing/lightweight/bpzv40
 
 
+### train
+所有命令位置：`example_train_script.sh`
+
+1. 先运行baseline得到权重文件，然后使用蒸馏算法
+```shell
+python train_base.py --data_name  cifar10  --net_name  resnet20
+```
 
 
+2. 然后使用各种蒸馏算法
 
+命令位置：`example_train_script.sh`
 
+for example:
+```
 
-
-
+# SoftTarget KL散度（开山之作）
+CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
+                           --save_root "./results/st/" \
+                           --t_model "./results/base/base-c10-r110/model_best.pth.tar" \
+                           --s_init "./results/base/base-c10-r20/initial_r20.pth.tar" \
+                           --data_name cifar10 \
+                           --num_class 10 \
+                           --t_name resnet110 \
+                           --s_name resnet20 \
+                           --kd_mode st \
+                           --lambda_kd 0.1 \
+                           --T 4.0 \
+                           --note st-c10-r110-r20
+```
 
 
 
@@ -31,28 +54,28 @@ I will update this repo regularly with new KD methods. If there some basic metho
 ## Lists
   Name | Method | Paper Link | Code Link
   :---- | ----- | :----: | :----:
-  Baseline | basic model with softmax loss | — | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/train_base.py)
-  Logits   | mimic learning via regressing logits | [paper](http://papers.nips.cc/paper/5484-do-deep-nets-really-need-to-be-deep.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/logits.py)
-  ST       | soft target | [paper](https://arxiv.org/pdf/1503.02531.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/st.py)
-  AT       | attention transfer | [paper](https://arxiv.org/pdf/1612.03928.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/at.py)
-  Fitnet   | hints for thin deep nets | [paper](https://arxiv.org/pdf/1412.6550.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/fitnet.py)
-  NST      | neural selective transfer | [paper](https://arxiv.org/pdf/1707.01219.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/nst.py)
-  PKT      | probabilistic knowledge transfer | [paper](http://openaccess.thecvf.com/content_ECCV_2018/papers/Nikolaos_Passalis_Learning_Deep_Representations_ECCV_2018_paper.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/pkt.py)
-  FSP      | flow of solution procedure | [paper](http://openaccess.thecvf.com/content_cvpr_2017/papers/Yim_A_Gift_From_CVPR_2017_paper.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/fsp.py)
-  FT       | factor transfer | [paper](http://papers.nips.cc/paper/7541-paraphrasing-complex-network-network-compression-via-factor-transfer.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/ft.py)
-  RKD      | relational knowledge distillation | [paper](https://arxiv.org/pdf/1904.05068.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/rkd.py)
-  AB       | activation boundary | [paper](https://arxiv.org/pdf/1811.03233.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/ab.py)
-  SP       | similarity preservation | [paper](https://arxiv.org/pdf/1907.09682.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/sp.py)
-  Sobolev  | sobolev/jacobian matching | [paper](https://arxiv.org/pdf/1706.04859.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/sobolev.py)
-  BSS      | boundary supporting samples | [paper](https://arxiv.org/pdf/1805.05532.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/bss.py)
-  CC       | correlation congruence | [paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Peng_Correlation_Congruence_for_Knowledge_Distillation_ICCV_2019_paper.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/cc.py)
-  LwM      | learning without memorizing | [paper](https://arxiv.org/pdf/1811.08051.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/lwm.py)
-  IRG      | instance relationship graph | [paper](http://openaccess.thecvf.com/content_CVPR_2019/papers/Liu_Knowledge_Distillation_via_Instance_Relationship_Graph_CVPR_2019_paper.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/irg.py)
-  VID      | variational information distillation | [paper](https://openaccess.thecvf.com/content_CVPR_2019/papers/Ahn_Variational_Information_Distillation_for_Knowledge_Transfer_CVPR_2019_paper.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/vid.py)
-  OFD      | overhaul of feature distillation | [paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Heo_A_Comprehensive_Overhaul_of_Feature_Distillation_ICCV_2019_paper.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/ofd.py)
-  AFD      | attention feature distillation | [paper](https://openreview.net/pdf?id=ryxyCeHtPB) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/afd.py)
-  CRD      | contrastive representation distillation | [paper](https://openreview.net/pdf?id=SkgpBJrtvS) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/crd.py)
-  DML      | deep mutual learning | [paper](https://openaccess.thecvf.com/content_cvpr_2018/papers/Zhang_Deep_Mutual_Learning_CVPR_2018_paper.pdf) | [code](https://github.com/AberHu/Knowledge-Distillation-Zoo/blob/master/kd_losses/dml.py)
+  Baseline | basic model with softmax loss | — | [code](./train_base.py)
+  Logits   | mimic learning via regressing logits | [paper](http://papers.nips.cc/paper/5484-do-deep-nets-really-need-to-be-deep.pdf) | [code](./kd_losses/logits.py)
+  ST       | soft target | [paper](https://arxiv.org/pdf/1503.02531.pdf) | [code](./kd_losses/st.py)
+  AT       | attention transfer | [paper](https://arxiv.org/pdf/1612.03928.pdf) | [code](./kd_losses/at.py)
+  Fitnet   | hints for thin deep nets | [paper](https://arxiv.org/pdf/1412.6550.pdf) | [code](./kd_losses/fitnet.py)
+  NST      | neural selective transfer | [paper](https://arxiv.org/pdf/1707.01219.pdf) | [code](./kd_losses/nst.py)
+  PKT      | probabilistic knowledge transfer | [paper](http://openaccess.thecvf.com/content_ECCV_2018/papers/Nikolaos_Passalis_Learning_Deep_Representations_ECCV_2018_paper.pdf) | [code](./kd_losses/pkt.py)
+  FSP      | flow of solution procedure | [paper](http://openaccess.thecvf.com/content_cvpr_2017/papers/Yim_A_Gift_From_CVPR_2017_paper.pdf) | [code](./kd_losses/fsp.py)
+  FT       | factor transfer | [paper](http://papers.nips.cc/paper/7541-paraphrasing-complex-network-network-compression-via-factor-transfer.pdf) | [code](./kd_losses/ft.py)
+  RKD      | relational knowledge distillation | [paper](https://arxiv.org/pdf/1904.05068.pdf) | [code](./kd_losses/rkd.py)
+  AB       | activation boundary | [paper](https://arxiv.org/pdf/1811.03233.pdf) | [code](./kd_losses/ab.py)
+  SP       | similarity preservation | [paper](https://arxiv.org/pdf/1907.09682.pdf) | [code](./kd_losses/sp.py)
+  Sobolev  | sobolev/jacobian matching | [paper](https://arxiv.org/pdf/1706.04859.pdf) | [code](./kd_losses/sobolev.py)
+  BSS      | boundary supporting samples | [paper](https://arxiv.org/pdf/1805.05532.pdf) | [code](./kd_losses/bss.py)
+  CC       | correlation congruence | [paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Peng_Correlation_Congruence_for_Knowledge_Distillation_ICCV_2019_paper.pdf) | [code](./kd_losses/cc.py)
+  LwM      | learning without memorizing | [paper](https://arxiv.org/pdf/1811.08051.pdf) | [code](./kd_losses/lwm.py)
+  IRG      | instance relationship graph | [paper](http://openaccess.thecvf.com/content_CVPR_2019/papers/Liu_Knowledge_Distillation_via_Instance_Relationship_Graph_CVPR_2019_paper.pdf) | [code](./kd_losses/irg.py)
+  VID      | variational information distillation | [paper](https://openaccess.thecvf.com/content_CVPR_2019/papers/Ahn_Variational_Information_Distillation_for_Knowledge_Transfer_CVPR_2019_paper.pdf) | [code](./kd_losses/vid.py)
+  OFD      | overhaul of feature distillation | [paper](http://openaccess.thecvf.com/content_ICCV_2019/papers/Heo_A_Comprehensive_Overhaul_of_Feature_Distillation_ICCV_2019_paper.pdf) | [code](./kd_losses/ofd.py)
+  AFD      | attention feature distillation | [paper](https://openreview.net/pdf?id=ryxyCeHtPB) | [code](./kd_losses/afd.py)
+  CRD      | contrastive representation distillation | [paper](https://openreview.net/pdf?id=SkgpBJrtvS) | [code](./kd_losses/crd.py)
+  DML      | deep mutual learning | [paper](https://openaccess.thecvf.com/content_cvpr_2018/papers/Zhang_Deep_Mutual_Learning_CVPR_2018_paper.pdf) | [code](./kd_losses/dml.py)
 
 - Note, there are some differences between this repository and the original papers：
 	- For `AT`: I use the sum of absolute values with power p=2 as the attention.

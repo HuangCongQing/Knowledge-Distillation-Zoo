@@ -68,6 +68,7 @@ def main():
 	logging.info("unparsed_args = %s", unparsed)
 
 	logging.info('----------- Network Initialization --------------')
+	# 网络>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 	net = define_tsnet(name=args.net_name, num_class=args.num_class, cuda=args.cuda)
 	logging.info('%s', net)
 	logging.info("param size = %fMB", count_parameters_in_MB(net))

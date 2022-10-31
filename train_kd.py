@@ -112,7 +112,7 @@ def main():
 	if args.kd_mode == 'logits':
 		criterionKD = Logits()
 	elif args.kd_mode == 'st':
-		criterionKD = SoftTarget(args.T)
+		criterionKD = SoftTarget(args.T) # 开山之作
 	elif args.kd_mode == 'at':
 		criterionKD = AT(args.p)
 	elif args.kd_mode == 'fitnet':

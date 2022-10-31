@@ -5,9 +5,10 @@ import torch
 import torch.nn as nn
 
 
+# main入口
 def define_tsnet(name, num_class, cuda=True):
 	if name == 'resnet20':
-		net = resnet20(num_class=num_class)
+		net = resnet20(num_class=num_class) # 网络
 	elif name == 'resnet110':
 		net = resnet110(num_class=num_class)
 	else:
@@ -61,7 +62,7 @@ class resblock(nn.Module):
 		else:
 			return pout, out
 
-
+# 网络1
 class resnet20(nn.Module):
 	def __init__(self, num_class):
 		super(resnet20, self).__init__()
@@ -121,7 +122,7 @@ class resnet20(nn.Module):
 				(64,),
 				(self.num_class,)]
 
-
+# 网络2
 class resnet110(nn.Module):
 	def __init__(self, num_class):
 		super(resnet110, self).__init__()
