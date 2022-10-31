@@ -1,4 +1,25 @@
 # Knowledge-Distillation-Zoo
+
+
+## 20221031
+
+Docs: https://www.yuque.com/huangzhongqing/lightweight/bpzv40
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
 ***News! I'm going to have a major update of this repo. The new version will contain most of the methods in Todo list. Please stay tuned.***
 
 Pytorch implementation of various Knowledge Distillation (KD) methods. 
