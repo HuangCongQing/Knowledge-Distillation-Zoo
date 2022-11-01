@@ -72,7 +72,7 @@ class resnet20(nn.Module):
 
 		self.res1 = self.make_layer(resblock, 3, 16, 16)
 		self.res2 = self.make_layer(resblock, 3, 16, 32)
-		self.res3 = self.make_layer(resblock, 3, 32, 64)
+		self.res3 = self.make_layer(resblock, 3, 32, 64) # 输出
 
 		self.avgpool = nn.AvgPool2d(8)
 		self.fc      = nn.Linear(64, num_class)
@@ -133,7 +133,7 @@ class resnet110(nn.Module):
 
 		self.res1 = self.make_layer(resblock, 18, 16, 16)
 		self.res2 = self.make_layer(resblock, 18, 16, 32)
-		self.res3 = self.make_layer(resblock, 18, 32, 64)
+		self.res3 = self.make_layer(resblock, 18, 32, 64)   # 输出
 
 		self.avgpool = nn.AvgPool2d(8)
 		self.fc      = nn.Linear(64, num_class)

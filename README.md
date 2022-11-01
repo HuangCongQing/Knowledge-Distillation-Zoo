@@ -41,6 +41,21 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
 
 
 
+```
+
+# fitnet
+CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
+                           --save_root "./results/fitnet/" \
+                           --t_model "./results/base/base-c10-r110/model_best.pth.tar" \
+                           --s_init "./results/base/base-c10-r20/initial_r20.pth.tar" \
+                           --data_name cifar10 \
+                           --num_class 10 \
+                           --t_name resnet110 \
+                           --s_name resnet20 \
+                           --kd_mode fitnet \
+                           --lambda_kd 0.1 \
+                           --note fitnet-c10-r110-r20
+
 
 
 ---

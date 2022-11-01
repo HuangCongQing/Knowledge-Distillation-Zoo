@@ -1,10 +1,24 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
+
+import collections
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd.gradcheck import zero_gradients
+# ImportError: cannot import name 'zero_gradients' from 'torch.autograd.gradcheck'
+# https://zhuanlan.zhihu.com/p/420312739
+# from torch.autograd.gradcheck import zero_gradients  # zero_gradients is removed from PyTorch 1.9. It was present until PyTorch 1.7.
+def zero_gradients(x):
+    if isinstance(x, torch.Tensor):
+        if x.grad is not None:
+            x.grad.detach_()
+            x.grad.zero_()
+    elif isinstance(x, collections.abc.Iterable):
+        for elem in x:
+            zero_gradients(elem)
+
 '''
 Modified by https://github.com/bhheo/BSS_distillation
 '''
