@@ -170,7 +170,7 @@ class resnet110(nn.Module):
 		feat = feat.view(feat.size(0), -1)
 		out  = self.fc(feat)
 
-		return stem, rb1, rb2, rb3, feat, out
+		return stem, rb1, rb2, rb3, feat, out # 输出
 
 	def get_channel_num(self):
 		return [16, 16, 32, 64, 64, self.num_class]

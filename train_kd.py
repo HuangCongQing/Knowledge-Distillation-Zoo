@@ -302,10 +302,12 @@ def train_init(train_loader, nets, optimizer, criterions, total_epoch):
 				img = img.cuda(non_blocking=True)
 				target = target.cuda(non_blocking=True)
 
-			stem_s, rb1_s, rb2_s, rb3_s, feat_s, out_s = snet(img)
-			stem_t, rb1_t, rb2_t, rb3_t, feat_t, out_t = tnet(img)
+			stem_s, rb1_s, rb2_s, rb3_s, feat_s, out_s = snet(img) # 学生输出
+			stem_t, rb1_t, rb2_t, rb3_t, feat_t, out_t = tnet(img) # 教师输出
 
 			cls_loss = criterionCls(out_s, target) * 0.0
+			# 拟合大模型层与层之间的关系 https://www.yuque.com/huangzhongqing/lightweight/ofs894#GiuNn
+			# 如下三层关系：stem_s, rb1_s关系， rb1_s, rb2_s关系， rb2_s, rb3_s关系，
 			if args.kd_mode in ['fsp']:
 				kd_loss = (criterionKD(stem_s[1], rb1_s[1], stem_t[1].detach(), rb1_t[1].detach()) +
 						   criterionKD(rb1_s[1],  rb2_s[1], rb1_t[1].detach(),  rb2_t[1].detach()) +
