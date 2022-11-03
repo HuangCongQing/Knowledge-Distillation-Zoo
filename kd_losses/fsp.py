@@ -28,7 +28,7 @@ class FSP(nn.Module):
 
 		# HW两维变成1维
 		fm1 = fm1.view(fm1.size(0), fm1.size(1), -1) # (128,16,16*16)
-		fm2 = fm2.view(fm2.size(0), fm2.size(1), -1).transpose(1,2) # (128,32,16*16)->(128,16*16,16)
+		fm2 = fm2.view(fm2.size(0), fm2.size(1), -1).transpose(1,2) # (128,32,16*16)->(128,16*16,32)
 
 		# 两个输入tensor维度是(b×n×m)和(b×m×p), https://www.yuque.com/huangzhongqing/pytorch/gck7a0#xwo2P
 		# (128,16,256) * (128,256,32)-->(128,16,32)    里面所数值再除以256 (128,16,32)/256
