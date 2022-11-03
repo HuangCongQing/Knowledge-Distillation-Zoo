@@ -23,7 +23,7 @@ class FSP(nn.Module):
 
 	# 层与层之间的内积
 	def fsp_matrix(self, fm1, fm2):
-		if fm1.size(2) > fm2.size(2): # shape变成大的fm1:(128, 16, 32, 32)-->(128, 16, 16, 16)
+		if fm1.size(2) > fm2.size(2): # shape变成小的fm1:(128, 16, 32, 32)-->(128, 16, 16, 16)
 			fm1 = F.adaptive_avg_pool2d(fm1, (fm2.size(2), fm2.size(3))) # >>>>输出固定维度 指定输出（H，W）
 
 		# HW两维变成1维
