@@ -173,7 +173,7 @@ def main():
 	else:
 		raise Exception('Invalid kd mode...')
 	if args.cuda:
-		criterionCls = torch.nn.CrossEntropyLoss().cuda()
+		criterionCls = torch.nn.CrossEntropyLoss().cuda() # 交叉熵损失
 	else:
 		criterionCls = torch.nn.CrossEntropyLoss()
 
@@ -386,8 +386,9 @@ def train(train_loader, nets, optimizer, criterions, epoch):
 		# SoftTarget（开山之作）  Response-Based Knowledge
 		if args.kd_mode in ['logits', 'st']:
 			kd_loss = criterionKD(out_s, out_t.detach()) * args.lambda_kd
+		# fitnets
 		elif args.kd_mode in ['fitnet', 'nst']:
-			kd_loss = criterionKD(rb3_s[1], rb3_t[1].detach()) * args.lambda_kd
+			kd_loss = criterionKD(rb3_s[1], rb3_t[1].detach()) * args.lambda_kd # --lambda_kd 0.1 
 		# 02 (AT) - Paying More Attention to Attention
 		elif args.kd_mode in ['at', 'sp']:
 			kd_loss = (criterionKD(rb1_s[1], rb1_t[1].detach()) +

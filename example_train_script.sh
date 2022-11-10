@@ -33,7 +33,7 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --s_name resnet20 \ # student
                            --kd_mode st \ # 区别>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                            --lambda_kd 0.1 \
-                           --T 4.0 \
+                           --T 4.0 \ # temperature  参数
                            --note st-c10-r110-r20
 
 # AT
@@ -50,7 +50,7 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --p 2.0 \
                            --note at-c10-r110-r20
 
-# Fitnet
+# Fitnet(无T temperature参数)
 CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --save_root "./results/fitnet/" \
                            --t_model "./results/base/base-c10-r110/model_best.pth.tar" \
@@ -59,7 +59,7 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --num_class 10 \
                            --t_name resnet110 \
                            --s_name resnet20 \
-                           --kd_mode fitnet \
+                           --kd_mode fitnet \ # 
                            --lambda_kd 0.1 \
                            --note fitnet-c10-r110-r20
 
@@ -102,7 +102,7 @@ CUDA_VISIBLE_DEVICES=0 python -u train_kd.py \
                            --lambda_kd 1.0 \
                            --note fsp-c10-r110-r20
 
-# FT
+# FT(!单独文件 train_ft.py  )
 CUDA_VISIBLE_DEVICES=0 python -u train_ft.py \
                            --save_root "./results/ft/" \
                            --t_model "./results/base/base-c10-r110/model_best.pth.tar" \
